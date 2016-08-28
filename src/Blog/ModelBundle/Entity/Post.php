@@ -3,6 +3,7 @@
 namespace Blog\ModelBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Post
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Post
+class Post extends Timestampable
 {
     /**
      * @var integer
@@ -25,6 +26,7 @@ class Post
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotBlank
      */
     private $title;
 
@@ -32,21 +34,24 @@ class Post
      * @var string
      *
      * @ORM\Column(name="body", type="text")
+     * @Assert\NotBlank
      */
     private $body;
 
     /**
-     * @var \DateTime
+     * @var Author
      *
-     * @ORM\Column(name="createdAt", type="datetime")
+     * @ORM\ManyToOne(targetEntity="Author", inversedBy="posts")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank
      */
-    private $createdAt;
+    private $author;
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,7 +74,7 @@ class Post
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -92,33 +97,34 @@ class Post
     /**
      * Get body
      *
-     * @return string 
+     * @return string
      */
     public function getBody()
     {
         return $this->body;
     }
 
+
     /**
-     * Set createdAt
+     * Set author
      *
-     * @param \DateTime $createdAt
+     * @param \Blog\ModelBundle\Entity\Author $author
      * @return Post
      */
-    public function setCreatedAt($createdAt)
+    public function setAuthor(Author $author)
     {
-        $this->createdAt = $createdAt;
+        $this->author = $author;
 
         return $this;
     }
 
     /**
-     * Get createdAt
+     * Get author
      *
-     * @return \DateTime 
+     * @return \Blog\ModelBundle\Entity\Author
      */
-    public function getCreatedAt()
+    public function getAuthor()
     {
-        return $this->createdAt;
+        return $this->author;
     }
 }
